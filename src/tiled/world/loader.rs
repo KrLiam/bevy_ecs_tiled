@@ -4,7 +4,7 @@
 
 use crate::{
     prelude::*,
-    tiled::{cache::TiledResourceCache, reader::BytesResourceReader},
+    tiled::{cache::TiledResourceCache, helpers::normalize_path, reader::BytesResourceReader},
 };
 use bevy::{
     asset::{io::Reader, AssetLoader, AssetPath, LoadContext},
@@ -92,6 +92,7 @@ impl AssetLoader for TiledWorldLoader {
         for map in world.maps.iter() {
             // Seems safe to unwrap() here since we do it on the world path (which should always have a parent)
             let map_path = world_path.parent().unwrap().join(map.filename.clone());
+            let map_path = normalize_path(&map_path);
 
             let (Some(map_width), Some(map_height)) = (map.width, map.height) else {
                 // Assume that we cannot get map width / map height because it's an infinite map

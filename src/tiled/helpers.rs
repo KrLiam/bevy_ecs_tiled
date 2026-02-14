@@ -3,7 +3,7 @@
 //! This module provides a collection of utility functions used throughout the crate for tasks such as
 //! coordinate conversions, data extraction, and other operations related to Tiled maps and worlds.
 
-use std::sync::Arc;
+use std::{path, sync::Arc};
 
 use crate::prelude::*;
 use bevy::prelude::*;
@@ -128,4 +128,32 @@ pub(crate) fn iso_projection(
         x: (fract.x - fract.y) * grid_size.x / 2. + origin_x,
         y: (fract.x + fract.y) * grid_size.y / 2.,
     }
+}
+
+/// Normalize paths.
+pub fn normalize_path(path: &path::Path) -> path::PathBuf {
+    let mut components = path.components().peekable();
+    let mut ret = if let Some(c @ path::Component::Prefix(..)) = components.peek().cloned() {
+        components.next();
+        path::PathBuf::from(c.as_os_str())
+    } else {
+        path::PathBuf::new()
+    };
+
+    for component in components {
+        match component {
+            path::Component::Prefix(..) => unreachable!(),
+            path::Component::RootDir => {
+                ret.push(component.as_os_str());
+            }
+            path::Component::CurDir => {}
+            path::Component::ParentDir => {
+                ret.pop();
+            }
+            path::Component::Normal(c) => {
+                ret.push(c);
+            }
+        }
+    }
+    ret
 }

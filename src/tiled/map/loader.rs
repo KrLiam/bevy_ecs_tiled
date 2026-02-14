@@ -9,7 +9,9 @@ use std::sync::Arc;
 use crate::{
     prelude::*,
     tiled::{
-        cache::TiledResourceCache, helpers::iso_projection, map::asset::TiledMapTileset,
+        cache::TiledResourceCache,
+        helpers::{iso_projection, normalize_path},
+        map::asset::TiledMapTileset,
         reader::BytesResourceReader,
     },
 };
@@ -183,8 +185,7 @@ impl AssetLoader for TiledMapLoader {
                     let Some(image) = &image_layer.image else {
                         continue;
                     };
-
-                    let asset_path = AssetPath::from(image.source.clone());
+                    let asset_path = AssetPath::from(normalize_path(&image.source));
                     let handle: Handle<Image> = load_context.load(asset_path);
 
                     images.insert(layer_index as u32, handle);
@@ -362,7 +363,7 @@ fn tileset_to_tiled_map_tileset(
                 let mut tile_images: Vec<Handle<Image>> = Vec::new();
                 for (tile_id, tile) in tileset.tiles() {
                     if let Some(img) = &tile.image {
-                        let asset_path = AssetPath::from(img.source.clone());
+                        let asset_path = AssetPath::from(normalize_path(&img.source));
                         trace!("Loading tile image from {asset_path:?} as image ({tileset_path}, {tile_id})");
                         let texture: Handle<Image> = load_context.load(asset_path.clone());
                         tile_image_offsets.insert(tile_id, tile_images.len() as u32);
@@ -389,7 +390,7 @@ fn tileset_to_tiled_map_tileset(
             }
         }
         Some(img) => {
-            let asset_path = AssetPath::from(img.source.clone());
+            let asset_path = AssetPath::from(normalize_path(&img.source));
             let texture: Handle<Image> = load_context.load(asset_path);
 
             let columns = (img.width as u32 - tileset.margin + tileset.spacing)
