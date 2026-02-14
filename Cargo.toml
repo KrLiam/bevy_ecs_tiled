@@ -66,7 +66,7 @@ serde_json = { version = "1.0", optional = true }
 # docs.rs-specific configuration
 [package.metadata.docs.rs]
 #features = ["debug","user_properties","physics","avian","rapier"]
-features = ["debug","user_properties","physics","avian"]
+features = ["debug", "user_properties", "physics", "avian"]
 
 # cargo-all-features configuration
 [package.metadata.cargo-all-features]
@@ -129,6 +129,9 @@ required-features = ["avian_debug"]
 [[example]]
 name = "physics_custom"
 required-features = ["physics"]
+
+[[example]]
+name = "image_collection"
 
 # [[example]]
 # name = "physics_rapier_controller"
