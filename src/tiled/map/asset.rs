@@ -4,6 +4,7 @@
 //! into Bevy's asset system.
 
 use crate::{prelude::*, tiled::helpers::iso_projection};
+use ::tiled::ImageRect;
 use bevy::{platform::collections::HashMap, prelude::*};
 use std::fmt;
 
@@ -16,6 +17,8 @@ pub(crate) struct TiledMapTileset {
     pub(crate) usable_for_tiles_layer: bool,
     /// Tileset texture (ie. a single image or an images collection)
     pub(crate) tilemap_texture: TilemapTexture,
+    /// Contains `ImageRect`s of the tiles if `tilemap_texture` is a vector.
+    pub(crate) tile_image_rects: Vec<Option<ImageRect>>,
     /// The [`TextureAtlasLayout`] handle associated to each tileset, if any.
     pub(crate) texture_atlas_layout_handle: Option<Handle<TextureAtlasLayout>>,
     /// The offset into the tileset_images for each tile id within each tileset.

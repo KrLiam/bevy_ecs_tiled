@@ -346,6 +346,7 @@ fn tileset_to_tiled_map_tileset(
     let mut texture_atlas_layout_handle = None;
     #[cfg(not(feature = "atlas"))]
     let mut tile_image_offsets = HashMap::default();
+    let mut tile_image_rects = Vec::new();
     let (usable_for_tiles_layer, tilemap_texture) = match &tileset.image {
         None => {
             #[cfg(feature = "atlas")]
@@ -366,6 +367,7 @@ fn tileset_to_tiled_map_tileset(
                         let texture: Handle<Image> = load_context.load(asset_path.clone());
                         tile_image_offsets.insert(tile_id, tile_images.len() as u32);
                         tile_images.push(texture.clone());
+                        tile_image_rects.push(tile.image_rect);
                         if usable_for_tiles_layer {
                             if let Some(image_size) = image_size {
                                 if img.width != image_size.0 || img.height != image_size.1 {
@@ -413,6 +415,7 @@ fn tileset_to_tiled_map_tileset(
     Some(TiledMapTileset {
         usable_for_tiles_layer,
         tilemap_texture,
+        tile_image_rects,
         texture_atlas_layout_handle,
         #[cfg(not(feature = "atlas"))]
         tile_image_offsets,

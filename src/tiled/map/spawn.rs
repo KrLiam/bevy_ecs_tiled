@@ -214,6 +214,11 @@ fn spawn_tiles_layer(
             continue;
         };
 
+        // image collection which is not a valid tile layer.
+        if !t.tile_image_rects.is_empty() {
+            continue;
+        }
+
         if !t.usable_for_tiles_layer {
             continue;
         }
@@ -534,6 +539,16 @@ fn handle_tile_object(
             TilemapTexture::Vector(vector) => {
                 let index = *t.tile_image_offsets.get(&tile.id())
                     .expect("The offset into the image vector for template should have been saved during the initial load.");
+                let rect = match t.tile_image_rects.get(index as usize) {
+                    Some(&Some(r)) => Some(Rect::new(
+                        r.x as f32, 
+                        r.y as f32, 
+                        (r.x + r.width) as f32, 
+                        (r.y + r.height) as f32
+                    )),
+                    Some(&None) => None,
+                    None => None,
+                };
                 vector.get(index as usize).map(|image| {
                     Sprite {
                         image: image.clone(),
@@ -543,6 +558,7 @@ fn handle_tile_object(
                             width,
                             height
                         )),
+                        rect,
                         ..default()
                     }
                 })
