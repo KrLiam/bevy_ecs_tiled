@@ -54,7 +54,6 @@ tiled = { version = "0.15", features = ["world"] }
 futures-lite = "2.6"
 log = "0.4"
 thiserror = "2.0"
-geo = "0.32"
 regex = "1.12"
 
 # Optional dependencies, enabled via features.
@@ -62,6 +61,8 @@ regex = "1.12"
 avian2d = { version = "0.5", optional = true }
 serde = { version = "1.0", optional = true, features = ["derive"] }
 serde_json = { version = "1.0", optional = true }
+geo = "0.32.0"
+getrandom = { version = "0.2", features = ["js"] }
 
 # docs.rs-specific configuration
 [package.metadata.docs.rs]
