@@ -120,7 +120,7 @@ pub(crate) async fn preload_external_resources(
 ) -> HashMap<PathBuf, Vec<u8>> {
     let mut cache = HashMap::default();
     let paths = extract_external_paths(xml_content);
-    let asset_path = load_context.path().to_path_buf();
+    let asset_path = load_context.path().path().to_path_buf();
     let asset_parent = asset_path.parent().map(|p| p.to_path_buf());
 
     for relative_path in paths {
