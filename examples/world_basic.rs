@@ -20,14 +20,14 @@ fn main() {
         .run();
 }
 
-fn startup(mut commands: Commands, asset_server: Res<AssetServer>) {
+fn startup(mut commands: Commands, _asset_server: Res<AssetServer>) {
     // Spawn a 2D camera (required by Bevy)
     commands.spawn(Camera2d);
 
     // Load a world then spawn it
     commands.spawn((
         // Only the [`TiledWorld`] component is actually required to spawn a world
-        TiledWorld(asset_server.load("worlds/orthogonal.world")),
+        // TiledWorld(asset_server.load("worlds/orthogonal.world")),
         // But you can add extra components to change the defaults settings and how
         // your world is actually displayed
         TilemapAnchor::Center,
