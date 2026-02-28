@@ -12,17 +12,25 @@ pub(crate) mod types_json;
 
 use crate::prelude::*;
 use bevy::prelude::*;
-use std::{fs::File, io::BufWriter, ops::Deref, path::Path};
 
 /// Export a Tiled types to the given path.
 ///
 /// The predicate determines whether a symbol is exported. To export all
 /// symbols, one can provide a blanket yes predicate, e.g. `|_| true`.
-pub fn export_types(reg: &AppTypeRegistry, path: impl AsRef<Path>, filter: &TiledFilter) {
-    let file = File::create(path).unwrap();
-    let writer = BufWriter::new(file);
-    let registry = export::TypeExportRegistry::from_registry(reg.read().deref(), filter);
-    serde_json::to_writer_pretty(writer, &registry.to_vec()).unwrap();
+pub fn export_types(
+    _reg: &AppTypeRegistry,
+    _path: impl AsRef<std::path::Path>,
+    _filter: &TiledFilter,
+) {
+    #[cfg(not(target_arch = "wasm32"))]
+    {
+        use std::{fs::File, io::BufWriter, ops::Deref};
+
+        let file = File::create(_path).unwrap();
+        let writer = BufWriter::new(file);
+        let registry = export::TypeExportRegistry::from_registry(_reg.read().deref(), _filter);
+        serde_json::to_writer_pretty(writer, &registry.to_vec()).unwrap();
+    }
 }
 
 pub(crate) fn plugin(app: &mut App) {
