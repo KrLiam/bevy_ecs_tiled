@@ -82,6 +82,15 @@ pub(crate) fn extract_external_paths(xml_content: &[u8]) -> Vec<PathBuf> {
                 }
             }
         }
+        if let Some(start) = line.find("template=\"") {
+            let rest = &line[start + 10..];
+            if let Some(end) = rest.find('"') {
+                let path = &rest[..end];
+                if path.ends_with(".tsx") || path.ends_with(".tx") {
+                    paths.push(PathBuf::from(path));
+                }
+            }
+        }
     }
 
     paths
